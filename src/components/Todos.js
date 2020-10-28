@@ -6,7 +6,7 @@ class Todos extends Component {
   render() {
     return  this.props.todos.map((todo) => (
         <TodoItem  key = { todo.id } markComplete = 
-        { this.props.markComplete } todo = {todo} delTodo={ this.props.delTodo }/>
+        { this.props.markComplete } todo = {todo} addItem={ this.props.addItem } checkCart = {this.checkCart}/>
 
     ));
   }
@@ -14,8 +14,7 @@ class Todos extends Component {
 //PropTypes
 Todos.propTypes = {
     todos: PropTypes.array.isRequired,
-    markComplete: PropTypes.func.isRequired,
-    delTodos: PropTypes.func.isRequired,
+    addItem: PropTypes.func.isRequired
 }
 export default Todos;
 
