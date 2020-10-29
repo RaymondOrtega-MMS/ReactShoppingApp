@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 import Header from './components/layout/Header'
-import About from './components/pages/About'
+// import About from './components/pages/About'
 import Todos from './components/Todos' 
 import Cart from './components/Cart'
 import { v4 as uuidv4 } from 'uuid';
@@ -13,19 +13,19 @@ class App extends Component {
   state = {
     todos: [
       {
-        itemID: uuidv4(),
+        itemID: 1,
         Item: 'car',
         Price: 23,
         Quantity: 1
       },
       {
-        itemID: uuidv4(),
+        itemID: 2,
         Item: 'truck',
         Price: 33,
         Quantity: 1
       },
       {
-        itemID: uuidv4(),
+        itemID: 3,
         Item: 'van',
         Price: 75,
         Quantity: 1
@@ -33,9 +33,29 @@ class App extends Component {
     ],
     cart: []
   }
+  addItem = (itemID) => {
+    const checkCart = (element) => element.itemID === itemID;
+    if(this.state.cart.some(checkCart)){
+      this.setState(prevState => {
+        let updatedCart = prevState.cart.map(item => {
+          if(itemID === item.itemID) {
+            let itemState = {...item}
+            itemState.Quantity += 1
+              return itemState;
+          } else {
+              return item;
+          }
+        })
+          return { cart: updatedCart }
+      }, )
+    }
+    else {
+      this.setState({ cart: [...this.state.cart, ...this.state.todos.filter(todo => todo.itemID === itemID)]})
+    }
+  }
 
-  addItem = (itemID, Quantity) => {
-    this.setState({ cart: [...this.state.cart, ...this.state.todos.filter(todo => todo.itemID === itemID)]})
+  removeItem = (cItem) => {
+    console.log(cItem)
   }
 render() {
   return (
@@ -48,11 +68,11 @@ render() {
               {/* <AddTodo addTodo = {this.addTodo}/> */}
               <Todos todos = {this.state.todos} /*markComplete = { this.markComplete }*/
               addItem = {this.addItem}/>
-              <Cart cart={this.state.cart}/>
+              <Cart cart={this.state.cart} removeItem = {this.removeItem}/>
             </React.Fragment>
           )}/>
           <Route path='/checkout' render= {props => (
-            <Cart cart={this.state.cart}/>
+            <Cart cart={this.state.cart} removeItem = {this.removeItem}/>
           )}/>
         </div>
       </div>
