@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 class CartItems extends Component {
      getStyle = () => {
         return {
+            display: 'grid',
+            gridTemplateColumns: '2fr 2fr 2fr .5fr',
             background: '#333',
             color: '#fff',
             padding: '10px'
@@ -14,18 +16,27 @@ class CartItems extends Component {
             color: 'white',
             boder: 'none',
             padding: '5px 9px',
-            borderRadius: '50%' ,
             cursor: 'pointer',
             float: 'right'
         }
     }
+    cartStyle = () => {
+        return {
+            color: 'white',
+            width: '100%',
+            boder: 'none',
+            padding: '5px 9px'
+        }
+    }
     render() {
-        const {Item, Price, Quantity} = this.props.item
-        const cart = this.props.cart;
+        const {Item, Price, Quantity, itemID} = this.props.item
+        const {citemID = itemID, cItem = Item, cPrice = Price, cQuantity = Quantity} = this.props.cart;
         return (
             <div style={this.getStyle()}>
-                {Item} {Price} {Quantity}
-                <button style={this.btnStyle()} onClick={ this.props.removeItem.bind(this, cart)}>X</button>
+                <span style={this.cartStyle()}>{Item}</span> 
+                <span style={this.cartStyle()}>Price:{' '} {Price}</span> 
+                <span style={this.cartStyle()}>Quantity:{' '} {Quantity}</span>
+                <button style={this.btnStyle()} onClick={ this.props.removeItem.bind(this, citemID)}>X</button>
             </div>
         )
     }

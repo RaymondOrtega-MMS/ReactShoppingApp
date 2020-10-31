@@ -5,6 +5,7 @@ import Header from './components/layout/Header'
 // import About from './components/pages/About'
 import Todos from './components/Todos' 
 import Cart from './components/Cart'
+import Calculate from './components/Calculate'
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 import './App.css'
@@ -13,27 +14,34 @@ class App extends Component {
   state = {
     todos: [
       {
-        itemID: 1,
+        itemID: uuidv4(),
         Item: 'car',
         Price: 23,
         Quantity: 1
       },
       {
-        itemID: 2,
+        itemID: uuidv4(),
         Item: 'truck',
         Price: 33,
         Quantity: 1
       },
       {
-        itemID: 3,
+        itemID: uuidv4(),
         Item: 'van',
         Price: 75,
         Quantity: 1
       }
     ],
-    cart: []
+    cart: [],
+    total: 0
   }
-  addItem = (itemID) => {
+calc = () => {
+  let total = this.state.cart.reduce((acc, cartItem) => {
+    return acc + (cartItem.Price * cartItem.Quantity);
+  }, 0);
+  return total
+}
+  addItem = (itemID, checkTotal, amount) => {
     const checkCart = (element) => element.itemID === itemID;
     if(this.state.cart.some(checkCart)){
       this.setState(prevState => {
@@ -46,16 +54,23 @@ class App extends Component {
               return item;
           }
         })
-          return { cart: updatedCart }
-      }, )
-    }
+      return { cart: updatedCart }
+    })
+  }
     else {
       this.setState({ cart: [...this.state.cart, ...this.state.todos.filter(todo => todo.itemID === itemID)]})
     }
   }
-
-  removeItem = (cItem) => {
-    console.log(cItem)
+  removeItem = (ItemID) => {
+    this.setState(prevState => {
+      let newCart;
+      let updatedCart = prevState.cart.filter(item => { 
+        if(item.itemID !== ItemID) {
+          return item 
+        }
+      })
+      return { cart: updatedCart } 
+    })
   }
 render() {
   return (
@@ -65,14 +80,18 @@ render() {
           <Header/>
           <Route exact path='/' render= {props => (
             <React.Fragment>
-              {/* <AddTodo addTodo = {this.addTodo}/> */}
-              <Todos todos = {this.state.todos} /*markComplete = { this.markComplete }*/
-              addItem = {this.addItem}/>
+              <Todos todos={this.state.todos}checkTotal={this.checkTotal}addItem = {this.addItem}/>
+              <h2>Cart</h2>
               <Cart cart={this.state.cart} removeItem = {this.removeItem}/>
+              <Calculate calc={this.calc} checkTotal ={this.checkTotal}cart={this.state.cart} total={this.state.total}/>
             </React.Fragment>
           )}/>
           <Route path='/checkout' render= {props => (
-            <Cart cart={this.state.cart} removeItem = {this.removeItem}/>
+            <React.Fragment>
+              <h1>Cart:</h1>
+              <Cart cart={this.state.cart} removeItem = {this.removeItem}/>
+              <Calculate calc={this.calc} checkTotal ={this.checkTotal}cart={this.state.cart} total={this.state.total}/>
+            </React.Fragment>
           )}/>
         </div>
       </div>
