@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import CartItems from './CartItems'
-import Calculate from './Calculate'
+
 export class Cart extends Component {
     render() {
         <h1>Cart</h1>

@@ -3,25 +3,28 @@ import PropTypes from 'prop-types';
 
 
 class TodoItem extends Component {
-    getStyle = () => {
-        return {
-            display: 'inline-grid',
-            width: '33.333%',
-            background: '#f4f4f4',
-            padding: '10px',
-            borderBottom: '1px #ccc dotted'
-        }
-    }
-    itemStyle = () => {
-        return {
-          background: '#f4f4f4',
-          padding: '30px',
-          borderBottom: '1px #ccc solid',
-          textAlign: 'center'
-      }
-    }
+//Styles 
+getStyle = () => {
+  return {
+      display: 'inline-grid',
+      width: '33.333%',
+      background: '#f4f4f4',
+      padding: '10px',
+      borderBottom: '1px #ccc dotted'
+  }
+}
+itemStyle = () => {
+  return {
+    background: '#f4f4f4',
+    padding: '30px',
+    borderBottom: '1px #ccc solid',
+    textAlign: 'center'
+}
+}
+
   render() {
-    const {itemID, Item, Price, Quantity} = this.props.todo;
+    const {itemID, Item, Price} = this.props.todo;
+    
     return (
       <div style = { this.getStyle() }>
           <span style={this.itemStyle()}>{ Item }</span>  
@@ -31,6 +34,7 @@ class TodoItem extends Component {
     );
   }
 }
+
 //PropTypes
 TodoItem.propTypes = {
     todo: PropTypes.object.isRequired,

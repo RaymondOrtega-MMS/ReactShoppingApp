@@ -6,34 +6,17 @@ import Header from './components/layout/Header'
 import Todos from './components/Todos' 
 import Cart from './components/Cart'
 import Calculate from './components/Calculate'
-import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 import './App.css'
 class App extends Component {
-
   state = {
-    todos: [
-      {
-        itemID: uuidv4(),
-        Item: 'car',
-        Price: 23,
-        Quantity: 1
-      },
-      {
-        itemID: uuidv4(),
-        Item: 'truck',
-        Price: 33,
-        Quantity: 1
-      },
-      {
-        itemID: uuidv4(),
-        Item: 'van',
-        Price: 75,
-        Quantity: 1
-      }
-    ],
-    cart: [],
-    total: 0
+    todos: [],
+    cart: []
+  }
+componentDidMount(){
+    axios.get('https://2zvtxl1pu5.execute-api.us-east-1.amazonaws.com/stable')
+    .then(res => this.setState({todos: res.data.todos}))
+    .catch(err => console.log(err))
   }
 calc = () => {
   let total = this.state.cart.reduce((acc, cartItem) => {
@@ -61,15 +44,32 @@ calc = () => {
       this.setState({ cart: [...this.state.cart, ...this.state.todos.filter(todo => todo.itemID === itemID)]})
     }
   }
-  removeItem = (ItemID) => {
+  removeItem = (itemID) => {
     this.setState(prevState => {
-      let newCart;
+      let decrement;
       let updatedCart = prevState.cart.filter(item => { 
-        if(item.itemID !== ItemID) {
-          return item 
-        }
+        if(item.itemID == itemID) {
+          return item;
+        } 
       })
-      return { cart: updatedCart } 
+      if(updatedCart[0].Quantity > 1) {        
+        decrement = prevState.cart.map(item => {
+          if (itemID === item.itemID && item.Quantity > 1){
+            let itemState = {...item}
+            itemState.Quantity -= 1
+            return  itemState 
+          } else {
+            return item;
+          }
+        })
+      } else {
+        decrement = prevState.cart.filter(item => { 
+          if(item.itemID !== itemID) {
+            return item 
+          } 
+        })
+      }
+      return { cart: decrement }
     })
   }
 render() {
@@ -88,7 +88,6 @@ render() {
           )}/>
           <Route path='/checkout' render= {props => (
             <React.Fragment>
-              <h1>Cart:</h1>
               <Cart cart={this.state.cart} removeItem = {this.removeItem}/>
               <Calculate calc={this.calc} checkTotal ={this.checkTotal}cart={this.state.cart} total={this.state.total}/>
             </React.Fragment>
@@ -130,3 +129,15 @@ export default App;
   //   this.setState({ todos: [...this.state.todos, newTodo] })
   // }
 
+      // {
+      //   itemID: uuidv4(),
+      //   Item: 'truck',
+      //   Price: 33,
+      //   Quantity: 1
+      // },
+      // {
+      //   itemID: uuidv4(),
+      //   Item: 'van',
+      //   Price: 75,
+      //   Quantity: 1
+      // }

@@ -30,7 +30,7 @@ class CartItems extends Component {
     }
     render() {
         const {Item, Price, Quantity, itemID} = this.props.item
-        const {citemID = itemID, cItem = Item, cPrice = Price, cQuantity = Quantity} = this.props.cart;
+        const {citemID = itemID} = this.props.cart;
         return (
             <div style={this.getStyle()}>
                 <span style={this.cartStyle()}>{Item}</span> 
