@@ -12,7 +12,7 @@ class CartItems extends Component {
     }
     btnStyle = () => {
         return {
-            backgroundColor: 'red',
+            backgroundColor: 'darkred',
             color: 'white',
             boder: 'none',
             padding: '5px 9px',
@@ -36,7 +36,7 @@ class CartItems extends Component {
                 <span style={this.cartStyle()}>{Item}</span> 
                 <span style={this.cartStyle()}>Price:{' '} {Price}</span> 
                 <span style={this.cartStyle()}>Quantity:{' '} {Quantity}</span>
-                <button style={this.btnStyle()} onClick={ this.props.removeItem.bind(this, citemID)}>X</button>
+                <button style={this.btnStyle()} onClick={ this.props.removeItem.bind(this, citemID)}>Remove</button>
             </div>
         )
     }

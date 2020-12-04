@@ -27,80 +27,79 @@ calc = () => {
   }, 0);
   return total
 }
-  sellItem = (itemName, price) => {
-      if(parseInt(price)){
-        axios.post('https://2zvtxl1pu5.execute-api.us-east-1.amazonaws.com/stable',{
-          itemID: uuidv4(),
-          Item: itemName,
-          Price: price,
-          Quantity: 1
-        })
-        .then(res => 
-            axios.get('https://2zvtxl1pu5.execute-api.us-east-1.amazonaws.com/stable')
-            .then(res => this.setState({todos: res.data.Items}))
-            .catch(err => console.log(err))
-          )
-        .catch(err => console.log(err))
-        console.log(itemName, price)
-      } else {
-        return alert('please use number value!')
-      }
-  }
-  addItem = (itemID, checkTotal, amount) => {
-    const checkCart = (element) => element.itemID === itemID;
-    if(this.state.cart.some(checkCart)){
-      this.setState(prevState => {
-        let updatedCart = prevState.cart.map(item => {
-          if(itemID === item.itemID) {
-            let itemState = {...item}
-            itemState.Quantity += 1
-              return itemState;
-          } else {
-              return item;
-          }
-        })
-      return { cart: updatedCart }
-    })
-  }
-    else {
-      this.setState({ cart: [...this.state.cart, ...this.state.todos.filter(todo => todo.itemID === itemID)]})
+sellItem = (itemName, price) => {
+    if(parseInt(price)){
+      axios.post('https://2zvtxl1pu5.execute-api.us-east-1.amazonaws.com/stable',{
+        itemID: uuidv4(),
+        Item: itemName,
+        Price: price,
+        Quantity: 1
+      })
+      .then(res => 
+          axios.get('https://2zvtxl1pu5.execute-api.us-east-1.amazonaws.com/stable')
+          .then(res => this.setState({todos: res.data.Items}))
+          .catch(err => console.log(err))
+        )
+      .catch(err => console.log(err))
+      console.log(itemName, price)
+    } else {
+      return alert('please use number value!')
     }
-  }
-
-  removeItem = (itemID) => {
+}
+addItem = (itemID, checkTotal, amount) => {
+  const checkCart = (element) => element.itemID === itemID;
+  if(this.state.cart.some(checkCart)){
     this.setState(prevState => {
-      let decrement;
-      let item = prevState.cart.filter(item => { 
+      let updatedCart = prevState.cart.map(item => {
+        if(itemID === item.itemID) {
+          let itemState = {...item}
+          itemState.Quantity += 1
+            return itemState;
+        } else {
+            return item;
+        }
+      })
+    return { cart: updatedCart }
+  })
+}
+  else {
+    this.setState({ cart: [...this.state.cart, ...this.state.todos.filter(todo => todo.itemID === itemID)]})
+  }
+}
+removeItem = (itemID) => {
+  this.setState(prevState => {
+    let decrement;
+    let item = prevState.cart.filter(item => { 
+      let newCart;
+      if(item.itemID === itemID) {
+        newCart = item;
+      }
+      return newCart;
+    })
+
+    if(item[0].Quantity > 1) {
+      decrement = prevState.cart.map(item => {
+        if (itemID === item.itemID && item.Quantity > 1){
+          let itemState = {...item}
+          itemState.Quantity -= 1
+          return  itemState 
+        } else {
+          return item;
+        }
+      })
+    } else {
+      decrement = prevState.cart.filter(item => {
         let newCart;
-        if(item.itemID === itemID) {
-          newCart = item;
+        if(item.itemID !== itemID) {
+          newCart = item            
         }
         return newCart;
       })
+    }
 
-      if(item[0].Quantity > 1) {
-        decrement = prevState.cart.map(item => {
-          if (itemID === item.itemID && item.Quantity > 1){
-            let itemState = {...item}
-            itemState.Quantity -= 1
-            return  itemState 
-          } else {
-            return item;
-          }
-        })
-      } else {
-        decrement = prevState.cart.filter(item => {
-          let newCart;
-          if(item.itemID !== itemID) {
-            newCart = item            
-          }
-          return newCart;
-        })
-      }
-
-      return { cart: decrement }
-    })
-  }
+    return { cart: decrement }
+  })
+}
 
 render() {
   return (
@@ -136,44 +135,3 @@ render() {
 }
 
 export default App;
-
-
-  //Runs right after the component mounts. Lif cycle method
-  // componentDidMount(){
-  //   axios.get('http://jsonplaceholder.typicode.com/todos?_limit=10')
-  //   .then(res => this.setState({todos: res.data}))
-  // }
-  // Toggle Comlplete
-  // markComplete = (itemID) => {
-  //     this.setState({ todos: this.state.todos.map(todo => {
-  //       if(todo.itemID === itemID){
-  //         console.log(todo)
-  //         todo.completed = !todo.completed
-  //       }
-  //       return todo;
-  //     })  });
-  // }
-  // add item to cart 
-
-  // add Todos
-  // addTodo = (title) => {
-  //   const newTodo = {
-  //         id: uuidv4(),
-  //         title,
-  //         completed: false
-  //   }
-  //   this.setState({ todos: [...this.state.todos, newTodo] })
-  // }
-
-      // {
-      //   itemID: uuidv4(),
-      //   Item: 'truck',
-      //   Price: 33,
-      //   Quantity: 1
-      // },
-      // {
-      //   itemID: uuidv4(),
-      //   Item: 'van',
-      //   Price: 75,
-      //   Quantity: 1
-      // }

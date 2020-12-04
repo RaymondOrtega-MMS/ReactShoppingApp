@@ -7,8 +7,9 @@ class TodoItem extends Component {
 getStyle = () => {
   return {
       display: 'inline-grid',
-      width: '33.333%',
+      width: '32%',
       background: '#f4f4f4',
+      margin: '15px 0 0 15px',
       padding: '10px',
       borderBottom: '1px #ccc dotted'
   }
@@ -42,6 +43,8 @@ TodoItem.propTypes = {
 }
 const btnStyle = {
     backgroundColor: 'green',
+    width: '33%',
+    margin: '0 0 0 33%',
     color: 'white',
     boder: 'none',
     padding: '5px 9px',
