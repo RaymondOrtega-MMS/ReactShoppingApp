@@ -1,5 +1,5 @@
 // import AddTodo from './components/AddTodo'
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 import Header from './components/layout/Header'
@@ -8,6 +8,7 @@ import Todos from './components/Todos'
 import Cart from './components/Cart'
 import Calculate from './components/Calculate'
 import Sell from './components/pages/sell'
+import SignIn from './components/SignIn';
 import axios from 'axios';
 import './App.css'
 class App extends Component {
@@ -100,14 +101,19 @@ removeItem = (itemID) => {
     return { cart: decrement }
   })
 }
-
 render() {
   return (
     <Router>
-      <div className="App">
-        <div className='container'>
-          <Header/>
-          <Route exact path='/' render= {props => (
+          <div className="App">
+            <div className='container'>
+              <Header/>
+              
+              <Route exact path='/' render= {props => (
+                <React.Fragment>
+                      <SignIn/>
+                  </React.Fragment>
+              )}/>
+          <Route exact path='/buy' render= {props => (
             <React.Fragment>
               <Todos todos={this.state.todos}checkTotal={this.checkTotal}addItem = {this.addItem}/>
               <h2>Cart</h2>
@@ -135,3 +141,84 @@ render() {
 }
 
 export default App;
+
+// import React, { useState } from "react";
+// import "./App.css";
+// import Axios from "axios";
+
+// function App() {
+//   const [registerUsername, setRegisterUsername] = useState("");
+//   const [registerPassword, setRegisterPassword] = useState("");
+//   const [loginUsername, setLoginUsername] = useState("");
+//   const [loginPassword, setLoginPassword] = useState("");
+//   const [data, setData] = useState(null);
+//   const register = () => {
+//     Axios({
+//       method: "POST",
+//       data: {
+//         username: registerUsername,
+//         password: registerPassword,
+//       },
+//       withCredentials: true,
+//       url: "http://localhost:4000/register",
+//     }).then((res) => console.log(res));
+//   };
+//   const login = () => {
+//     Axios({
+//       method: "POST",
+//       data: {
+//         username: loginUsername,
+//         password: loginPassword,
+//       },
+//       withCredentials: true,
+//       url: "http://localhost:4000/login",
+//     }).then((res) => console.log(res));
+//   };
+//   const getUser = () => {
+//     Axios({
+//       method: "GET",
+//       withCredentials: true,
+//       url: "http://localhost:4000/user",
+//     }).then((res) => {
+//       setData(res.data);
+//       console.log(res.data);
+//     });
+//   };
+//   return (
+//     <div className="App">
+//       <div>
+//         <h1>Register</h1>
+//         <input
+//           placeholder="username"
+//           onChange={(e) => setRegisterUsername(e.target.value)}
+//         />
+//         <input
+//           placeholder="password"
+//           onChange={(e) => setRegisterPassword(e.target.value)}
+//         />
+//         <button onClick={register}>Submit</button>
+//       </div>
+
+//       <div>
+//         <h1>Login</h1>
+//         <input
+//           placeholder="username"
+//           onChange={(e) => setLoginUsername(e.target.value)}
+//         />
+//         <input
+//           placeholder="password"
+//           onChange={(e) => setLoginPassword(e.target.value)}
+//         />
+//         <button onClick={login}>Submit</button>
+//       </div>
+
+//       <div>
+//         <h1>Get User</h1>
+//         <button onClick={getUser}>Submit</button>
+//         {data ? <h1>Welcome Back {data.username}</h1> : null}
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default App;
