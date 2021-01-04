@@ -20,7 +20,7 @@ itemStyle = () => {
     padding: '30px',
     borderBottom: '1px #ccc solid',
     textAlign: 'center'
-}
+  }
 }
 
   render() {
