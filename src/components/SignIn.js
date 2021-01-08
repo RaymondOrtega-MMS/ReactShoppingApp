@@ -1,23 +1,11 @@
 import React, { useState } from "react";
+import { Link } from 'react-router-dom';
 import Axios from "axios";
 
-function SignIn() {
-  const [registerUsername, setRegisterUsername] = useState("");
-  const [registerPassword, setRegisterPassword] = useState("");
+export default function SignIn() {
   const [loginUsername, setLoginUsername] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
-  const [data, setData] = useState(null);
-  const register = () => {
-    Axios({
-      method: "POST",
-      data: {
-        username: registerUsername,
-        password: registerPassword,
-      },
-      withCredentials: true,
-      url: "http://localhost:4000/register",
-    }).then((res) => console.log(res));
-  };
+
   const login = () => {
     Axios({
       method: "POST",
@@ -29,32 +17,9 @@ function SignIn() {
       url: "http://localhost:4000/login",
     }).then((res) => console.log(res));
   };
-  const getUser = () => {
-    Axios({
-      method: "GET",
-      withCredentials: true,
-      url: "http://localhost:4000/user",
-    }).then((res) => {
-      setData(res.data);
-      console.log(res.data);
-    });
-  };
   return (
-    <div className="App">
-      <div>
-        <h1>Register</h1>
-        <input
-          placeholder="username"
-          onChange={(e) => setRegisterUsername(e.target.value)}
-        />
-        <input
-          placeholder="password"
-          onChange={(e) => setRegisterPassword(e.target.value)}
-        />
-        <button onClick={register}>Submit</button>
-      </div>
-
-      <div>
+    <div style={{display:'grid', gridTemplateColumns:'1fr 1fr 1fr', backgroundColor: '#f8f8ff'}}>
+      <div style={{ gridColumn:'2/3' }}>
         <h1>Login</h1>
         <input
           placeholder="username"
@@ -66,14 +31,7 @@ function SignIn() {
         />
         <button onClick={login}>Submit</button>
       </div>
-
-      <div>
-        <h1>Get User</h1>
-        <button onClick={getUser}>Submit</button>
-        {data ? <h1>Welcome Back {data.username}</h1> : null}
-      </div>
+      <Link style={{ gridColumn:'2/3' }} to="/register">Register</Link>
     </div>
   );
 }
-
-export default SignIn;
